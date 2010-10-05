@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="./testBootstrap.php" colors="true" verbose="true">
+    <testsuites>
+	    <testsuite name="Methods-proxy test suite">
+	        <directory>./CacheAdapter</directory>
+	        <file>./ProxyTest.php</file>
+	    </testsuite>
+    </testsuites>
+    
+    <groups>
+        <exclude>
+            <group>disable</group>
+        </exclude>
+    </groups>
+</phpunit>
