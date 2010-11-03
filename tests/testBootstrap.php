@@ -14,3 +14,8 @@ class MockSubject
         return sprintf(self::MESSAGE, __CLASS__, $param);
     }
 }
+
+class Foo
+{
+    public function setSubjectObject() { }
+}

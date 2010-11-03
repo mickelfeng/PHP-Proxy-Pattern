@@ -108,4 +108,10 @@ class ProxyTest extends \PHPUnit_Framework_TestCase
         $this->_proxy->mockCall(0);
         $this->assertEquals(1, $this->_proxy->getCacheHits($hash));
     }
+    
+    public function testCollision()
+    {
+        $this->setExpectedException("LogicException", "not allowed");
+        $this->_proxy->setSubjectObject(new \Foo);
+    }
 }

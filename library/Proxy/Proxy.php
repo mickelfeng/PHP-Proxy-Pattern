@@ -104,11 +104,18 @@ class Proxy
      * @var array
      */
     protected $_cacheHits = array();
+    
+    /**
+     * Proxy methods to compare to Subject methods
+     * Proxy methods are cached into this property
+     */
+    protected $_thisMethods = array();
 
     /**
      * Sets a subject to cache methods from
      *
      * @param object $o
+     * @throws \InvalidArgumentException
      * @return Proxy
      */
     public function setSubjectObject($o)
@@ -117,6 +124,31 @@ class Proxy
             throw new \InvalidArgumentException("Object required");
         }
         $this->_subjectObject = $o;
+        $this->_checkForConsistency();
+        return $this;
+    }
+    
+    /**
+     * Checks that the subject doesn't have the
+     * same methods as the proxy. Proxy uses __call(), so...
+     * 
+     * @throws \LogicException
+     * @return Proxy
+     */
+    protected function _checkForConsistency()
+    {
+        if (!$this->_thisMethods) {
+            $reflection = new \ReflectionObject($this);
+            $this->_thisMethods = array_filter(
+                       $reflection->getMethods(),
+                       function ($val){return $val->isPublic() && $val->getName() !== '__call';});
+            $this->_thisMethods = array_map(
+                       function ($val) {return $val->getName();},
+                       $this->_thisMethods);
+        }
+        if ($comonMethods = array_intersect($this->_thisMethods, get_class_methods($this->_subjectObject))) {
+            throw new \LogicException(sprintf("Methods %s are not allowed in the subject", implode(' ', $comonMethods)));
+        }
         return $this;
     }
 
