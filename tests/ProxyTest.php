@@ -76,7 +76,7 @@ class ProxyTest extends \PHPUnit_Framework_TestCase
         $arg = "foobar";
         $this->_proxy->mockCall($arg);
         $hash = $this->_proxy->makeHash(array(get_class($this->_mockSubject), 'mockCall', array($arg)));
-        $this->assertType("string", $this->_mockCache->get($hash));
+        $this->assertInternalType("string", $this->_mockCache->get($hash));
         $this->assertStringMatchesFormat(\MockSubject::MESSAGE, $this->_mockCache->get($hash));
     }
     
